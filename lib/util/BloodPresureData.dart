@@ -87,5 +87,7 @@ class BPDataProvider {
         where: '$columnId = ?', whereArgs: [data.id]);
   }
 
+  void dropTable() => db.delete(tableBPData);
+
   Future close() async => db.close();
 }
