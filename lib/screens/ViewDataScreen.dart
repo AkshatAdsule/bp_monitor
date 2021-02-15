@@ -1,3 +1,4 @@
+import 'package:bp_monitor/components/linechart.dart';
 import 'package:bp_monitor/constants.dart';
 import 'package:bp_monitor/util/BloodPresureData.dart';
 import 'package:flutter/material.dart';
@@ -33,27 +34,12 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child: _data == []
-              ? null
-              : ListView.builder(
-                  itemCount: _data.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      buildRow(_data[index])),
-        ),
+            child: _data == null || _data.length == 0
+                ? Center(
+                    child: Text('Add some data'),
+                  )
+                : BPLineChart(data: _data)),
       ),
     );
   }
-}
-
-Widget buildRow(BPData data) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text('Diastolic: ${data.diastolic}'),
-        Text('Systolic: ${data.systolic}'),
-      ],
-    ),
-  );
 }

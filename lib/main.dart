@@ -1,6 +1,9 @@
 import 'package:bp_monitor/screens/AddDataScreen.dart';
 import 'package:bp_monitor/screens/ViewDataScreen.dart';
+import 'package:bp_monitor/util/BloodPresureData.dart';
 import 'package:flutter/material.dart';
+
+import 'constants.dart';
 
 void main() async {
   runApp(App());
@@ -28,6 +31,42 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static List<Widget> _screens = [ViewDataScreen(), AddDataScreen()];
 
+  void _handlePopupClick(String id) {
+    if (id == 'clear_db') {
+      _handleDeleteDBRequest();
+    }
+  }
+
+  void _handleDeleteDBRequest() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Are you sure you want to clear the database?'),
+        content: Text('This will delete all entries'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              BPDataProvider _provider = BPDataProvider();
+              await _provider.open(Constants.DB_PATH);
+              setState(() {
+                _provider.dropTable();
+              });
+              await _provider.close();
+              Navigator.pop(context);
+            },
+            child: Text('Clear Database'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +74,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('BP Monitor'),
         actions: [
           PopupMenuButton<String>(
+            onSelected: _handlePopupClick,
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem<String>(
