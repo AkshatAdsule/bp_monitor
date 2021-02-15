@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/flutter,jetbrains,vscode,dart,android,swift
-# Edit at https://www.toptal.com/developers/gitignore?templates=flutter,jetbrains,vscode,dart,android,swift
+# Created by https://www.toptal.com/developers/gitignore/api/dart,swift,vscode,android,flutter,jetbrains,macos,vim
+# Edit at https://www.toptal.com/developers/gitignore?templates=dart,swift,vscode,android,flutter,jetbrains,macos,vim
 
 ### Android ###
 # Built application files
@@ -281,6 +281,35 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
 ### Swift ###
 # Xcode
 #
@@ -361,6 +390,27 @@ fastlane/screenshots/**/*.png
 
 iOSInjectionProject/
 
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
 ### vscode ###
 .vscode/*
 !.vscode/settings.json
@@ -369,4 +419,4 @@ iOSInjectionProject/
 !.vscode/extensions.json
 *.code-workspace
 
-# End of https://www.toptal.com/developers/gitignore/api/flutter,jetbrains,vscode,dart,android,swift
+# End of https://www.toptal.com/developers/gitignore/api/dart,swift,vscode,android,flutter,jetbrains,macos,vim
