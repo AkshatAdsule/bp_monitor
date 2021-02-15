@@ -1,5 +1,6 @@
 import 'package:bp_monitor/constants.dart';
-import 'package:bp_monitor/util/BloodPressureData.dart';
+import 'package:bp_monitor/models/BloodPressureData.dart';
+import 'package:bp_monitor/util/Util.dart';
 import 'package:flutter/material.dart';
 
 class ViewDB extends StatefulWidget {
@@ -45,7 +46,7 @@ class _ViewDBState extends State<ViewDB> {
                 child: DataTable(
                   columns: [
                     DataColumn(
-                      label: Text('Timestamp'),
+                      label: Text('Date'),
                     ),
                     DataColumn(
                       label: Text('Diastolic'),
@@ -60,9 +61,10 @@ class _ViewDBState extends State<ViewDB> {
                         cells: [
                           DataCell(
                             Text(
-                              DateTime.fromMillisecondsSinceEpoch(
-                                      data.timestamp)
-                                  .toString(),
+                              Util.formatTime(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    data.timestamp),
+                              ),
                             ),
                           ),
                           DataCell(

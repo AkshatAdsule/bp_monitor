@@ -1,6 +1,6 @@
 import 'package:bp_monitor/components/linechart.dart';
 import 'package:bp_monitor/constants.dart';
-import 'package:bp_monitor/util/BloodPressureData.dart';
+import 'package:bp_monitor/models/BloodPressureData.dart';
 import 'package:flutter/material.dart';
 
 class ViewDataScreen extends StatefulWidget {

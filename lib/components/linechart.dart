@@ -1,4 +1,5 @@
-import 'package:bp_monitor/util/BloodPressureData.dart';
+import 'package:bp_monitor/models/BloodPressureData.dart';
+import 'package:bp_monitor/util/Util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -103,7 +104,7 @@ class _BPLineChartState extends State<BPLineChart> {
         new Padding(
           padding: new EdgeInsets.only(top: 5.0),
           child: new Text(
-            _time.toString(),
+            Util.formatTime(_time),
           ),
         ),
       );
