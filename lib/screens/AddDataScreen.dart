@@ -8,30 +8,35 @@ class AddDataScreen extends StatefulWidget {
 }
 
 class _AddDataScreenState extends State<AddDataScreen> {
-  int diastolic = 0, systolic = 0;
+  int _diastolic = 0, _systolic = 0;
   TextEditingController _diastolicController = TextEditingController();
   TextEditingController _systolicController = TextEditingController();
 
   BPDataProvider _provider = BPDataProvider();
 
   Future<void> _addData() async {
-    if (diastolic != 0 && systolic != 0) {
+    if ((_diastolic >= Constants.DIASTOLIC_MIN &&
+            _diastolic <= Constants.DIASTOLIC_MAX) &&
+        (_systolic >= Constants.SYSTOLIC_MIN &&
+            _diastolic <= Constants.SYSTOLIC_MAX)) {
       await _provider.open(Constants.DB_PATH);
       await _provider.insert(
         BPData(
-          diastolic: diastolic,
-          systolic: systolic,
+          diastolic: _diastolic,
+          systolic: _systolic,
           timestamp: DateTime.now().millisecondsSinceEpoch,
         ),
       );
       await _provider.close();
+      _diastolicController.clear();
+      _systolicController.clear();
       final SnackBar snackBar = SnackBar(content: Text('Data was added'));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       final SnackBar snackBar = SnackBar(
         content: Text(
-            'Make sure that both Diastolic and Systolic fields are filled'),
+            'Make sure that both Diastolic and Systolic fields are filled and are valid'),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -51,7 +56,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
               decoration: InputDecoration(labelText: 'Diastolic'),
               onChanged: (String value) {
                 try {
-                  diastolic = int.parse(value);
+                  _diastolic = int.parse(value);
                 } catch (e) {
                   if (value != "") {
                     SnackBar snackbar = SnackBar(
@@ -69,7 +74,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
               decoration: InputDecoration(labelText: 'Systolic'),
               onChanged: (String value) {
                 try {
-                  systolic = int.parse(value);
+                  _systolic = int.parse(value);
                 } catch (e) {
                   if (value != "") {
                     SnackBar snackbar = SnackBar(
@@ -81,7 +86,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
                 }
               },
             ),
-            MaterialButton(
+            SizedBox(
+              height: 20,
+            ),
+            FlatButton(
+              color: Colors.red,
               onPressed: () {
                 _addData();
               },
