@@ -1,6 +1,6 @@
 import 'package:bp_monitor/components/linechart.dart';
 import 'package:bp_monitor/constants.dart';
-import 'package:bp_monitor/util/BloodPresureData.dart';
+import 'package:bp_monitor/util/BloodPressureData.dart';
 import 'package:flutter/material.dart';
 
 class ViewDataScreen extends StatefulWidget {
@@ -34,11 +34,15 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-            child: _data == null || _data.length == 0
-                ? Center(
-                    child: Text('Add some data'),
-                  )
-                : BPLineChart(data: _data)),
+          child: _data == null || _data.length == 0
+              ? Center(
+                  child: Text(
+                    'No data, add data to get started',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                )
+              : BPLineChart(data: _data),
+        ),
       ),
     );
   }

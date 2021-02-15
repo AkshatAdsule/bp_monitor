@@ -1,6 +1,7 @@
 import 'package:bp_monitor/screens/AddDataScreen.dart';
+import 'package:bp_monitor/screens/ViewDB.dart';
 import 'package:bp_monitor/screens/ViewDataScreen.dart';
-import 'package:bp_monitor/util/BloodPresureData.dart';
+import 'package:bp_monitor/util/BloodPressureData.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -17,7 +18,8 @@ class App extends StatelessWidget {
         accentColor: Colors.redAccent,
         primaryColor: Colors.red,
       ),
-      home: HomePage(),
+      initialRoute: 'home',
+      routes: {'home': (_) => HomePage(), 'view_db': (_) => ViewDB()},
     );
   }
 }
@@ -32,8 +34,12 @@ class _HomePageState extends State<HomePage> {
   static List<Widget> _screens = [ViewDataScreen(), AddDataScreen()];
 
   void _handlePopupClick(String id) {
-    if (id == 'clear_db') {
-      _handleDeleteDBRequest();
+    switch (id) {
+      case 'clear_db':
+        _handleDeleteDBRequest();
+        break;
+      case 'view_data':
+        _handleViewDataRequest();
     }
   }
 
@@ -67,16 +73,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _handleViewDataRequest() {
+    Navigator.pushNamed(context, 'view_db');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('BP Monitor'),
+        title: Text('Blood Pressure  Monitor'),
         actions: [
           PopupMenuButton<String>(
             onSelected: _handlePopupClick,
             itemBuilder: (BuildContext context) {
               return [
+                PopupMenuItem<String>(
+                  value: 'view_data',
+                  child: Text('View Data'),
+                ),
                 PopupMenuItem<String>(
                   value: 'clear_db',
                   child: Text('Clear Database'),

@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:bp_monitor/constants.dart';
-import 'package:bp_monitor/util/BloodPresureData.dart';
+import 'package:bp_monitor/util/BloodPressureData.dart';
 import 'package:flutter/material.dart';
 
 class AddDataScreen extends StatefulWidget {
@@ -21,9 +19,10 @@ class _AddDataScreenState extends State<AddDataScreen> {
       await _provider.open(Constants.DB_PATH);
       await _provider.insert(
         BPData(
-            diastolic: diastolic,
-            systolic: systolic,
-            timestamp: DateTime.now().millisecondsSinceEpoch),
+          diastolic: diastolic,
+          systolic: systolic,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
       );
       await _provider.close();
       final SnackBar snackBar = SnackBar(content: Text('Data was added'));
@@ -31,8 +30,9 @@ class _AddDataScreenState extends State<AddDataScreen> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       final SnackBar snackBar = SnackBar(
-          content: Text(
-              'Make sure that both Diastolic and Systolic fields are filled'));
+        content: Text(
+            'Make sure that both Diastolic and Systolic fields are filled'),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -48,17 +48,18 @@ class _AddDataScreenState extends State<AddDataScreen> {
             TextField(
               controller: _diastolicController,
               keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
               decoration: InputDecoration(labelText: 'Diastolic'),
               onChanged: (String value) {
                 try {
                   diastolic = int.parse(value);
                 } catch (e) {
-                  SnackBar snackbar = SnackBar(
-                    content: Text('Enter only whole numbers'),
-                    duration: Duration(milliseconds: 500),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  if (value != "") {
+                    SnackBar snackbar = SnackBar(
+                      content: Text('Enter only whole numbers'),
+                      duration: Duration(milliseconds: 1500),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  }
                 }
               },
             ),
@@ -70,11 +71,13 @@ class _AddDataScreenState extends State<AddDataScreen> {
                 try {
                   systolic = int.parse(value);
                 } catch (e) {
-                  SnackBar snackbar = SnackBar(
-                    content: Text('Enter only whole numbers'),
-                    duration: Duration(milliseconds: 500),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  if (value != "") {
+                    SnackBar snackbar = SnackBar(
+                      content: Text('Enter only whole numbers'),
+                      duration: Duration(milliseconds: 1500),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                  }
                 }
               },
             ),
