@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bp_monitor">
+    package="tech.aksads.bp_monitor">
    <application
-        android:label="bp_monitor"
+        android:label="Blood Pressure Monitor"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

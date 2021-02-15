@@ -1,4 +1,4 @@
-package com.example.bp_monitor
+package tech.aksads.bp_monitor
 
 import io.flutter.embedding.android.FlutterActivity
 
