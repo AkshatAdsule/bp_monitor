@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Blood Pressure  Monitor'),
+        title: Text('Blood Pressure Monitor'),
         actions: [
           PopupMenuButton<String>(
             onSelected: _handlePopupClick,
