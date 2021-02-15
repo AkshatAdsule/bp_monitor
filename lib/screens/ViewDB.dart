@@ -21,8 +21,6 @@ class _ViewDBState extends State<ViewDB> {
     await _provider.close();
   }
 
-  Future<void> _deleteData(int id) {}
-
   @override
   void initState() {
     _init();
