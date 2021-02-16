@@ -51,12 +51,12 @@ class _AddDataScreenState extends State<AddDataScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _diastolicController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Diastolic'),
+              controller: _systolicController,
+              decoration: InputDecoration(labelText: 'Systolic'),
               onChanged: (String value) {
                 try {
-                  _diastolic = int.parse(value);
+                  _systolic = int.parse(value);
                 } catch (e) {
                   if (value != "") {
                     SnackBar snackbar = SnackBar(
@@ -69,12 +69,12 @@ class _AddDataScreenState extends State<AddDataScreen> {
               },
             ),
             TextField(
+              controller: _diastolicController,
               keyboardType: TextInputType.number,
-              controller: _systolicController,
-              decoration: InputDecoration(labelText: 'Systolic'),
+              decoration: InputDecoration(labelText: 'Diastolic'),
               onChanged: (String value) {
                 try {
-                  _systolic = int.parse(value);
+                  _diastolic = int.parse(value);
                 } catch (e) {
                   if (value != "") {
                     SnackBar snackbar = SnackBar(
