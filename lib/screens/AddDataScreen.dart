@@ -1,5 +1,6 @@
 import 'package:bp_monitor/constants.dart';
 import 'package:bp_monitor/models/BloodPressureData.dart';
+import 'package:bp_monitor/util/Util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,41 +12,51 @@ class AddDataScreen extends StatefulWidget {
 class _AddDataScreenState extends State<AddDataScreen> {
   TextEditingController _diastolicController = TextEditingController();
   TextEditingController _systolicController = TextEditingController();
-  TextEditingController _heartrateController = TextEditingController();
+  TextEditingController _heartRateController = TextEditingController();
 
   BPDataProvider _provider = BPDataProvider();
 
   Future<void> _addData() async {
-    int diastolic = int.parse(_diastolicController.value.text);
-    int systolic = int.parse(_systolicController.value.text);
-    int heartrate = int.parse(_heartrateController.value.text);
+    int diastolic, systolic, heartRate;
 
-    if ((diastolic >= Constants.DIASTOLIC_MIN &&
-            diastolic <= Constants.DIASTOLIC_MAX) &&
-        (systolic >= Constants.SYSTOLIC_MIN &&
-            systolic <= Constants.SYSTOLIC_MAX)) {
-      await _provider.open(Constants.DB_PATH);
-      await _provider.insert(
-        BPData(
-          diastolic: diastolic,
-          systolic: systolic,
-          heartrate: heartrate,
-          timestamp: DateTime.now().millisecondsSinceEpoch,
-        ),
-      );
-      await _provider.close();
-      _diastolicController.clear();
-      _systolicController.clear();
-      _heartrateController.clear();
-      final SnackBar snackBar = SnackBar(content: Text('Data was added'));
+    // Make sure fields are filled by trying to convert to int
+    try {
+      diastolic = int.parse(_diastolicController.value.text);
+      systolic = int.parse(_systolicController.value.text);
+      heartRate = int.parse(_heartRateController.value.text);
+    } catch (error) {
+      Util.showSnackBar(context, "Make sure all fields are filled out");
+      return;
+    }
 
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // Validate data before adding to db
+    if (!(diastolic >= Constants.DIASTOLIC_MIN &&
+        diastolic <= Constants.DIASTOLIC_MAX)) {
+      Util.showSnackBar(context,
+          "Diastolic value looks of. Make sure that diastolic value is correct");
+    } else if (!(systolic >= Constants.SYSTOLIC_MIN &&
+        systolic <= Constants.SYSTOLIC_MAX)) {
+      Util.showSnackBar(context,
+          "Systolic value looks of. Make sure that systolic value is correct");
+    } else if (!(heartRate >= Constants.HEART_RATE_MIN &&
+        heartRate <= Constants.HEART_RATE_MAX)) {
+      Util.showSnackBar(context,
+          "Heart rate value looks of. Make sure that heart rate value is correct");
     } else {
-      final SnackBar snackBar = SnackBar(
-        content: Text(
-            'Make sure that both Diastolic and Systolic fields are filled and are valid'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      await _provider.open(Constants.DB_PATH);
+      await _provider
+          .insert(
+            BPData(
+              diastolic: diastolic,
+              systolic: systolic,
+              heartrate: heartRate,
+              timestamp: DateTime.now().millisecondsSinceEpoch,
+            ),
+          )
+          .then(
+            (value) => Util.showSnackBar(context, "Data was added"),
+          );
+      await _provider.close();
     }
   }
 
@@ -57,30 +68,12 @@ class _AddDataScreenState extends State<AddDataScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: _systolicController,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                  labelText:
-                      'Systolic (${Constants.SYSTOLIC_MIN} - ${Constants.SYSTOLIC_MAX})'),
-            ),
-            TextField(
-              controller: _diastolicController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                  labelText:
-                      'Diastolic (${Constants.DIASTOLIC_MIN} - ${Constants.DIASTOLIC_MAX})'),
-            ),
-            TextField(
-              controller: _heartrateController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                  labelText:
-                      'Heartrate (${Constants.HEART_RATE_MIN} - ${Constants.HEART_RATE_MAX})'),
-            ),
+            _buildTextField("Diastolic", _diastolicController,
+                Constants.DIASTOLIC_MIN, Constants.DIASTOLIC_MAX),
+            _buildTextField("Systolic", _systolicController,
+                Constants.SYSTOLIC_MIN, Constants.SYSTOLIC_MAX),
+            _buildTextField("Heart rate", _heartRateController,
+                Constants.HEART_RATE_MIN, Constants.HEART_RATE_MAX),
             SizedBox(
               height: 20,
             ),
@@ -93,6 +86,18 @@ class _AddDataScreenState extends State<AddDataScreen> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  TextField _buildTextField(
+      String name, TextEditingController controller, int min, int max) {
+    return TextField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      decoration: InputDecoration(
+        labelText: '$name ($min - $max)',
       ),
     );
   }
