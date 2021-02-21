@@ -15,7 +15,9 @@ class _BPLineChartState extends State<BPLineChart> {
   Map<String, num> _measures;
 
   List<charts.Series<_TimeSeriesBPData, DateTime>> _getSeries() {
-    List<_TimeSeriesBPData> _diastolicData = [], _systolicData = [];
+    List<_TimeSeriesBPData> _diastolicData = [],
+        _systolicData = [],
+        _heartrateData = [];
 
     for (BPData d in widget.data) {
       DateTime time = DateTime.fromMillisecondsSinceEpoch(d.timestamp);
@@ -24,6 +26,9 @@ class _BPLineChartState extends State<BPLineChart> {
       );
       _systolicData.add(
         _TimeSeriesBPData(time: time, data: d.systolic),
+      );
+      _heartrateData.add(
+        _TimeSeriesBPData(time: time, data: d.heartrate),
       );
     }
 
@@ -41,6 +46,13 @@ class _BPLineChartState extends State<BPLineChart> {
         domainFn: (_TimeSeriesBPData data, _) => data.time,
         measureFn: (_TimeSeriesBPData data, _) => data.data,
         data: _systolicData,
+      ),
+      new charts.Series<_TimeSeriesBPData, DateTime>(
+        id: 'Heart Rate',
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+        domainFn: (_TimeSeriesBPData data, _) => data.time,
+        measureFn: (_TimeSeriesBPData data, _) => data.data,
+        data: _heartrateData,
       ),
     ];
   }
@@ -68,7 +80,7 @@ class _BPLineChartState extends State<BPLineChart> {
   Widget build(BuildContext context) {
     final List<Widget> _children = [
       SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
+        height: MediaQuery.of(context).size.height * 0.65,
         child: charts.TimeSeriesChart(
           _getSeries(),
           defaultRenderer:
@@ -110,7 +122,26 @@ class _BPLineChartState extends State<BPLineChart> {
       );
     }
     _measures?.forEach((String series, num value) {
-      _children.add(new Text('$series: $value'));
+      Color textColor;
+      switch (series) {
+        case 'Systolic':
+          textColor = Colors.red;
+          break;
+        case 'Diastolic':
+          textColor = Colors.blue;
+          break;
+        default:
+          textColor = Colors.green;
+          break;
+      }
+      _children.add(
+        new Text(
+          '$series: $value',
+          style: TextStyle(
+            color: textColor,
+          ),
+        ),
+      );
     });
 
     return Column(children: _children);

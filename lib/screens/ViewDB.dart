@@ -2,6 +2,7 @@ import 'package:bp_monitor/constants.dart';
 import 'package:bp_monitor/models/BloodPressureData.dart';
 import 'package:bp_monitor/util/Util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class ViewDB extends StatefulWidget {
   @override
@@ -43,43 +44,55 @@ class _ViewDBState extends State<ViewDB> {
                 ),
               )
             : SingleChildScrollView(
-                child: DataTable(
-                  columns: [
-                    DataColumn(
-                      label: Text('Date'),
-                    ),
-                    DataColumn(
-                      label: Text('Diastolic'),
-                    ),
-                    DataColumn(
-                      label: Text('Systolic'),
-                    ),
-                  ],
-                  rows: [
-                    for (BPData data in _data)
-                      DataRow(
-                        cells: [
-                          DataCell(
-                            Text(
-                              Util.formatTime(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    data.timestamp),
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: [
+                      DataColumn(
+                        label: Text('Date'),
+                      ),
+                      DataColumn(
+                        label: Text('Diastolic'),
+                      ),
+                      DataColumn(
+                        label: Text('Systolic'),
+                      ),
+                      DataColumn(
+                        label: Text('Heart Rate'),
+                      ),
+                    ],
+                    rows: [
+                      for (BPData data in _data)
+                        DataRow(
+                          cells: [
+                            DataCell(
+                              Text(
+                                Util.formatTime(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      data.timestamp),
+                                ),
                               ),
                             ),
-                          ),
-                          DataCell(
-                            Text(
-                              data.diastolic.toString(),
+                            DataCell(
+                              Text(
+                                data.diastolic.toString(),
+                              ),
                             ),
-                          ),
-                          DataCell(
-                            Text(
-                              data.systolic.toString(),
+                            DataCell(
+                              Text(
+                                data.systolic.toString(),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                  ],
+                            DataCell(
+                              Text(
+                                data.heartrate.toString(),
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
               ),
       ),

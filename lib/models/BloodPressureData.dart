@@ -5,13 +5,14 @@ import 'package:sqflite/sqlite_api.dart';
 import '../constants.dart';
 
 class BPData {
-  int id, systolic, diastolic, timestamp;
+  int id, systolic, diastolic, heartrate, timestamp;
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       Constants.COLUMN_SYSTOLIC: systolic,
       Constants.COLUMN_DIASTOLIC: diastolic,
-      Constants.COLUMN_TIMESTAMP: timestamp
+      Constants.COLUMN_TIMESTAMP: timestamp,
+      Constants.COLUMN_HEARTRATE: heartrate
     };
     if (id != null) {
       map[Constants.COLUMN_ID] = id;
@@ -22,11 +23,13 @@ class BPData {
   BPData(
       {@required this.diastolic,
       @required this.systolic,
+      @required this.heartrate,
       @required this.timestamp});
   BPData.fromMap(Map<String, dynamic> map) {
     id = map[Constants.COLUMN_ID];
     systolic = map[Constants.COLUMN_SYSTOLIC];
     diastolic = map[Constants.COLUMN_DIASTOLIC];
+    heartrate = map[Constants.COLUMN_HEARTRATE];
     timestamp = map[Constants.COLUMN_TIMESTAMP];
   }
 }
@@ -42,7 +45,8 @@ class BPDataProvider {
         ${Constants.COLUMN_ID} integer primary key autoincrement,
         ${Constants.COLUMN_SYSTOLIC} integer not null,
         ${Constants.COLUMN_DIASTOLIC} integer not null,
-        ${Constants.COLUMN_TIMESTAMP} integer not null)
+        ${Constants.COLUMN_TIMESTAMP} integer not null,
+	${Constants.COLUMN_HEARTRATE} integer)
       ''');
     });
   }
@@ -58,7 +62,8 @@ class BPDataProvider {
           Constants.COLUMN_ID,
           Constants.COLUMN_SYSTOLIC,
           Constants.COLUMN_DIASTOLIC,
-          Constants.COLUMN_TIMESTAMP
+          Constants.COLUMN_TIMESTAMP,
+          Constants.COLUMN_HEARTRATE
         ],
         where: '${Constants.COLUMN_ID} = ?',
         whereArgs: [id]);

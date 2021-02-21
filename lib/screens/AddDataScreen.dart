@@ -1,6 +1,7 @@
 import 'package:bp_monitor/constants.dart';
 import 'package:bp_monitor/models/BloodPressureData.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AddDataScreen extends StatefulWidget {
   @override
@@ -8,28 +9,34 @@ class AddDataScreen extends StatefulWidget {
 }
 
 class _AddDataScreenState extends State<AddDataScreen> {
-  int _diastolic = 0, _systolic = 0;
   TextEditingController _diastolicController = TextEditingController();
   TextEditingController _systolicController = TextEditingController();
+  TextEditingController _heartrateController = TextEditingController();
 
   BPDataProvider _provider = BPDataProvider();
 
   Future<void> _addData() async {
-    if ((_diastolic >= Constants.DIASTOLIC_MIN &&
-            _diastolic <= Constants.DIASTOLIC_MAX) &&
-        (_systolic >= Constants.SYSTOLIC_MIN &&
-            _diastolic <= Constants.SYSTOLIC_MAX)) {
+    int diastolic = int.parse(_diastolicController.value.text);
+    int systolic = int.parse(_systolicController.value.text);
+    int heartrate = int.parse(_heartrateController.value.text);
+
+    if ((diastolic >= Constants.DIASTOLIC_MIN &&
+            diastolic <= Constants.DIASTOLIC_MAX) &&
+        (systolic >= Constants.SYSTOLIC_MIN &&
+            systolic <= Constants.SYSTOLIC_MAX)) {
       await _provider.open(Constants.DB_PATH);
       await _provider.insert(
         BPData(
-          diastolic: _diastolic,
-          systolic: _systolic,
+          diastolic: diastolic,
+          systolic: systolic,
+          heartrate: heartrate,
           timestamp: DateTime.now().millisecondsSinceEpoch,
         ),
       );
       await _provider.close();
       _diastolicController.clear();
       _systolicController.clear();
+      _heartrateController.clear();
       final SnackBar snackBar = SnackBar(content: Text('Data was added'));
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -53,38 +60,26 @@ class _AddDataScreenState extends State<AddDataScreen> {
             TextField(
               keyboardType: TextInputType.number,
               controller: _systolicController,
-              decoration: InputDecoration(labelText: 'Systolic'),
-              onChanged: (String value) {
-                try {
-                  _systolic = int.parse(value);
-                } catch (e) {
-                  if (value != "") {
-                    SnackBar snackbar = SnackBar(
-                      content: Text('Enter only whole numbers'),
-                      duration: Duration(milliseconds: 1500),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                  }
-                }
-              },
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                  labelText:
+                      'Systolic (${Constants.SYSTOLIC_MIN} - ${Constants.SYSTOLIC_MAX})'),
             ),
             TextField(
               controller: _diastolicController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Diastolic'),
-              onChanged: (String value) {
-                try {
-                  _diastolic = int.parse(value);
-                } catch (e) {
-                  if (value != "") {
-                    SnackBar snackbar = SnackBar(
-                      content: Text('Enter only whole numbers'),
-                      duration: Duration(milliseconds: 1500),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                  }
-                }
-              },
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                  labelText:
+                      'Diastolic (${Constants.DIASTOLIC_MIN} - ${Constants.DIASTOLIC_MAX})'),
+            ),
+            TextField(
+              controller: _heartrateController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                  labelText:
+                      'Heartrate (${Constants.HEART_RATE_MIN} - ${Constants.HEART_RATE_MAX})'),
             ),
             SizedBox(
               height: 20,
