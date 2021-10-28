@@ -6,13 +6,16 @@ publish_to: 'none'
 version: 1.0.2+3
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: ^1.3.0
-  charts_flutter: ^0.9.0
+  sqflite: ^2.0.0+4
+  charts_flutter: ^0.11.0
+  path_provider: ^2.0.5
+  permission_handler: ^8.2.5
+  share_plus: ^3.0.4
 
 dev_dependencies:
   flutter_test:
@@ -22,3 +25,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  charts_flutter:
+    git:
+      url: https://github.com/google/charts
+      path: charts_flutter

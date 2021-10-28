@@ -11,7 +11,7 @@ class ViewDB extends StatefulWidget {
 
 class _ViewDBState extends State<ViewDB> {
   BPDataProvider _provider = BPDataProvider();
-  List<BPData> _data;
+  List<BPData>? _data;
 
   Future<void> _init() async {
     await _provider.open(Constants.DB_PATH);
@@ -36,7 +36,7 @@ class _ViewDBState extends State<ViewDB> {
         title: Text('View Data'),
       ),
       body: Center(
-        child: _data == null || _data.length == 0
+        child: _data == null || _data!.length == 0
             ? Center(
                 child: Text(
                   'No data, add data to get started',
@@ -63,14 +63,14 @@ class _ViewDBState extends State<ViewDB> {
                       ),
                     ],
                     rows: [
-                      for (BPData data in _data)
+                      for (BPData data in _data!)
                         DataRow(
                           cells: [
                             DataCell(
                               Text(
                                 Util.formatTime(
                                   DateTime.fromMillisecondsSinceEpoch(
-                                      data.timestamp),
+                                      data.timestamp!),
                                 ),
                               ),
                             ),

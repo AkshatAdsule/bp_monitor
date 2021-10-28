@@ -2,11 +2,14 @@ import 'package:bp_monitor/models/BloodPressureData.dart';
 import 'package:bp_monitor/screens/AddDataScreen.dart';
 import 'package:bp_monitor/screens/ViewDB.dart';
 import 'package:bp_monitor/screens/ViewDataScreen.dart';
+import 'package:bp_monitor/services/export_service.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'constants.dart';
 
 void main() async {
+  
   runApp(App());
 }
 
@@ -38,8 +41,12 @@ class _HomePageState extends State<HomePage> {
       case 'clear_db':
         _handleDeleteDBRequest();
         break;
+      case 'export_db':
+        _handleExportDBRequest();
+        break;
       case 'view_data':
         _handleViewDataRequest();
+        break;
     }
   }
 
@@ -73,6 +80,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _handleExportDBRequest() async {
+    BPDataProvider _provider = BPDataProvider();
+    await _provider.open(Constants.DB_PATH);
+    String path =
+        await ExportService.exportAsCSV(await _provider.getAllBPData());
+    Share.shareFiles([path]);
+  }
+
   void _handleViewDataRequest() {
     Navigator.pushNamed(context, 'view_db');
   }
@@ -90,6 +105,10 @@ class _HomePageState extends State<HomePage> {
                 PopupMenuItem<String>(
                   value: 'view_data',
                   child: Text('View Data'),
+                ),
+                PopupMenuItem<String>(
+                  value: 'export_db',
+                  child: Text('Export Database'),
                 ),
                 PopupMenuItem<String>(
                   value: 'clear_db',
