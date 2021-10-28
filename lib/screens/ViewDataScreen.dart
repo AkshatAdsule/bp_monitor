@@ -34,7 +34,7 @@ class _ViewDataScreenState extends State<ViewDataScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
-          child: _data == null || _data.length == 0
+          child: _data.length == 0
               ? Center(
                   child: Text(
                     'No data, add data to get started',

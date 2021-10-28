@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 class BPLineChart extends StatefulWidget {
   final List<BPData> data;
-  BPLineChart({@required this.data});
+  BPLineChart({required this.data});
   @override
   _BPLineChartState createState() => _BPLineChartState();
 }
 
 class _BPLineChartState extends State<BPLineChart> {
-  DateTime _time;
-  Map<String, num> _measures;
+  DateTime? _time;
+  Map<String, num>? _measures;
 
   List<charts.Series<_TimeSeriesBPData, DateTime>> _getSeries() {
     List<_TimeSeriesBPData> _diastolicData = [],
@@ -20,15 +20,15 @@ class _BPLineChartState extends State<BPLineChart> {
         _heartrateData = [];
 
     for (BPData d in widget.data) {
-      DateTime time = DateTime.fromMillisecondsSinceEpoch(d.timestamp);
+      DateTime time = DateTime.fromMillisecondsSinceEpoch(d.timestamp!);
       _diastolicData.add(
-        _TimeSeriesBPData(time: time, data: d.diastolic),
+        _TimeSeriesBPData(time: time, data: d.diastolic!),
       );
       _systolicData.add(
-        _TimeSeriesBPData(time: time, data: d.systolic),
+        _TimeSeriesBPData(time: time, data: d.systolic!),
       );
       _heartrateData.add(
-        _TimeSeriesBPData(time: time, data: d.heartrate),
+        _TimeSeriesBPData(time: time, data: d.heartrate!),
       );
     }
 
@@ -66,7 +66,7 @@ class _BPLineChartState extends State<BPLineChart> {
       time = selectedData.first.datum.time;
       selectedData.forEach(
         (charts.SeriesDatum datumPair) {
-          measures[datumPair.series.displayName] = datumPair.datum.data;
+          measures[datumPair.series.displayName!] = datumPair.datum.data;
         },
       );
       setState(() {
@@ -111,16 +111,16 @@ class _BPLineChartState extends State<BPLineChart> {
         ),
       ),
     ];
-    if (_time != null) {
-      _children.add(
-        new Padding(
-          padding: new EdgeInsets.only(top: 5.0),
-          child: new Text(
-            Util.formatTime(_time),
-          ),
+
+    _children.add(
+      new Padding(
+        padding: new EdgeInsets.only(top: 5.0),
+        child: new Text(
+          _time == null ? "" : Util.formatTime(_time!),
         ),
-      );
-    }
+      ),
+    );
+
     _measures?.forEach((String series, num value) {
       Color textColor;
       switch (series) {
@@ -152,5 +152,5 @@ class _TimeSeriesBPData {
   final DateTime time;
   final int data;
 
-  _TimeSeriesBPData({this.time, this.data});
+  _TimeSeriesBPData({required this.time,required this.data});
 }

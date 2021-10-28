@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 import '../constants.dart';
 
 class BPData {
-  int id, systolic, diastolic, heartrate, timestamp;
+  int? id, systolic, diastolic, heartrate, timestamp;
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
@@ -21,10 +20,10 @@ class BPData {
   }
 
   BPData(
-      {@required this.diastolic,
-      @required this.systolic,
-      @required this.heartrate,
-      @required this.timestamp});
+      {required this.diastolic,
+      required this.systolic,
+      required this.heartrate,
+      required this.timestamp});
   BPData.fromMap(Map<String, dynamic> map) {
     id = map[Constants.COLUMN_ID];
     systolic = map[Constants.COLUMN_SYSTOLIC];
@@ -32,10 +31,14 @@ class BPData {
     heartrate = map[Constants.COLUMN_HEARTRATE];
     timestamp = map[Constants.COLUMN_TIMESTAMP];
   }
+
+  String toCSVLine() {
+    return "$id,$systolic,$diastolic,$heartrate,${timestamp.toString()}";
+  }
 }
 
 class BPDataProvider {
-  Database db;
+  late Database db;
 
   Future open(String path) async {
     db = await openDatabase(path, version: 1,
@@ -56,7 +59,7 @@ class BPDataProvider {
     return bpData;
   }
 
-  Future<BPData> getBPData(int id) async {
+  Future<BPData?> getBPData(int id) async {
     List<Map> maps = await db.query(Constants.TABLE_BP_DATA,
         columns: [
           Constants.COLUMN_ID,
@@ -68,7 +71,7 @@ class BPDataProvider {
         where: '${Constants.COLUMN_ID} = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
-      return BPData.fromMap(maps.first);
+      return BPData.fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }
