@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bp_monitor/models/BloodPressureData.dart';
+import 'package:bp_monitor/models/blood_pressure_data.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';

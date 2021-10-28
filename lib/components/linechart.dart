@@ -1,5 +1,5 @@
-import 'package:bp_monitor/models/BloodPressureData.dart';
-import 'package:bp_monitor/util/Util.dart';
+import 'package:bp_monitor/models/blood_pressure_data.dart';
+import 'package:bp_monitor/util/util.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 

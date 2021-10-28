@@ -1,7 +1,7 @@
-import 'package:bp_monitor/models/BloodPressureData.dart';
-import 'package:bp_monitor/screens/AddDataScreen.dart';
-import 'package:bp_monitor/screens/ViewDB.dart';
-import 'package:bp_monitor/screens/ViewDataScreen.dart';
+import 'package:bp_monitor/models/blood_pressure_data.dart';
+import 'package:bp_monitor/screens/add_data.dart';
+import 'package:bp_monitor/screens/view_db.dart';
+import 'package:bp_monitor/screens/view_data.dart';
 import 'package:bp_monitor/services/export_service.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
